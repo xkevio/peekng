@@ -86,25 +86,21 @@ impl TryFrom<&[u8]> for Png {
         }
 
         while pointer < value.len() {
-            let length = u32::from_be_bytes([
-                value[pointer],
-                value[pointer + 1],
-                value[pointer + 2],
-                value[pointer + 3],
-            ]);
+            let length = u32::from_be_bytes(value[pointer..pointer + 4].try_into().unwrap());
+
             let chunk_type = ChunkType::try_from([
                 value[pointer + 4],
                 value[pointer + 5],
                 value[pointer + 6],
                 value[pointer + 7],
             ])?;
+
             let chunk_data = value[pointer + 8..(pointer + 8 + length as usize)].to_vec();
-            let crc_byte: u32 = u32::from_be_bytes([
-                value[8 + pointer + length as usize],
-                value[8 + pointer + length as usize + 1],
-                value[8 + pointer + length as usize + 2],
-                value[8 + pointer + length as usize + 3],
-            ]);
+            let crc_byte: u32 = u32::from_be_bytes(
+                value[8 + pointer + length as usize..12 + pointer + length as usize]
+                    .try_into()
+                    .unwrap(),
+            );
 
             let mut type_and_data: Vec<u8> = Vec::from(chunk_type.bytes());
             type_and_data.extend(&chunk_data);
