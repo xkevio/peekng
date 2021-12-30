@@ -53,7 +53,7 @@ pub fn remove(args: RemoveArgs) -> Result<()> {
 
 pub fn print(args: PrintArgs) -> Result<()> {
     let bytes = std::fs::read(&args.file_path)?;
-    let png = Png::try_from(bytes.as_slice())?;
+    let png = Png::try_from(&bytes[..])?;
 
     println!("{}", png);
     Ok(())
