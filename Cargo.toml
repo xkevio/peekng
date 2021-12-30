@@ -1,0 +1,11 @@
+[package]
+name = "peekng"
+version = "0.1.0"
+edition = "2021"
+authors = ["xkevio"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crc = "2.1.0"
+clap = { version = "3.0.0-rc.9", features = ["derive"] }
